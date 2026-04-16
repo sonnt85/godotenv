@@ -165,7 +165,9 @@ func LoadStdoutScript(script string, overloads ...bool) (err error) {
 	return nil
 }
 
-func EnrovimentMergeWithCurrentEnv(envMap map[string]string) (senv []string) {
+// EnvironmentMergeWithCurrentEnv merges the given env map with the current environment
+// and returns the result as a slice of "KEY=VALUE" strings.
+func EnvironmentMergeWithCurrentEnv(envMap map[string]string) (senv []string) {
 	var currentEnvMap = make(map[string]string, 0)
 	for _, rawEnvLine := range os.Environ() {
 		k, v, ok := strings.Cut(rawEnvLine, "=")
@@ -195,7 +197,7 @@ func ExeEnvFromStdoutScript(script string, cmd string, cmdArgs ...string) (err e
 	// command.Stdin = os.Stdin
 	// command.Stdout = os.Stdout
 	// command.Stderr = os.Stderr
-	command.Env = EnrovimentMergeWithCurrentEnv(envMap)
+	command.Env = EnvironmentMergeWithCurrentEnv(envMap)
 	return command.Run()
 }
 
@@ -317,6 +319,11 @@ func loadMap(envMap map[string]string, overload bool) {
 			os.Setenv(key, value)
 		}
 	}
+}
+
+// Deprecated: Use EnvironmentMergeWithCurrentEnv instead.
+func EnrovimentMergeWithCurrentEnv(envMap map[string]string) []string {
+	return EnvironmentMergeWithCurrentEnv(envMap)
 }
 
 func readFile(filename string) (envMap map[string]string, err error) {
