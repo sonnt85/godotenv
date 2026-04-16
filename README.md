@@ -1,5 +1,7 @@
 # godotenv
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/sonnt85/godotenv.svg)](https://pkg.go.dev/github.com/sonnt85/godotenv)
+
 A Go port of the Ruby dotenv library — loads environment variables from `.env` files.
 
 ## Installation
