@@ -78,6 +78,10 @@ func main() {
 - `ExeEnvFromStdoutScript(script, cmd string, cmdArgs ...string) error` — run a command with env from a shell script
 - `EnvironmentMergeWithCurrentEnv(envMap map[string]string) []string` — merge map with current env as `KEY=VALUE` slice
 
+## Author
+
+**sonnt85** — [thanhson.rf@gmail.com](mailto:thanhson.rf@gmail.com)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
