@@ -64,16 +64,19 @@ func TestEnvScripts(t *testing.T) {
 : ${NEXTCLOUD_SIGNALING_SERVERS:=signaling.${DEFAULT_DOMAIN}:443}
 : ${NEXTCLOUD_ELASTIC_HOST:=http://bootstrap.password:${ELASTIC_PASSWORD}@localhost:9200}
 `
-	if of, err := sexec.OpenMemFd(b, ""); err == nil {
-		if m, e := ParseStdoutScript(fmt.Sprintf(printenvfiletemplateEmbed, of.Name(), of.Name())); e == nil {
-			of.Close()
-			fmt.Printf("%#v", ppjson.ToString(m))
-		}
+	of, err := sexec.OpenMemFd(b, "")
+	if err != nil {
+		t.Skipf("OpenMemFd not supported on this platform: %v", err)
 	}
-	// sexec.
-	// if m, e := ParseStdoutScript(fmt.Sprintf(printenvfiletemplateEmbed, string(b), string(b))); e == nil {
-	// 	fmt.Printf("%#v", m)
-	// }
+	defer of.Close()
+	m, err := ParseStdoutScript(fmt.Sprintf(printenvfiletemplateEmbed, of.Name(), of.Name()))
+	if err != nil {
+		t.Fatalf("ParseStdoutScript: %v", err)
+	}
+	if len(m) == 0 {
+		t.Error("ParseStdoutScript returned empty map")
+	}
+	t.Logf("parsed: %s", ppjson.ToString(m))
 }
 func parseAndCompare(t *testing.T, rawEnvLine string, expectedKey string, expectedValue string) {
 	key, value, _ := parseLine(rawEnvLine, noopPresets)
